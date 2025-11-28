@@ -37,6 +37,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnTogglePassword = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
@@ -59,6 +60,7 @@
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(284, 22);
             this.txtPassword.TabIndex = 2;
+            this.txtPassword.TextChanged += new System.EventHandler(this.txtPassword_TextChanged);
             // 
             // btnLogin
             // 
@@ -123,6 +125,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(307, 285);
             this.panel1.TabIndex = 10;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // btnTogglePassword
             // 
@@ -140,10 +143,19 @@
             // 
             this.panel2.Controls.Add(this.pictureBox2);
             this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Location = new System.Drawing.Point(491, -1);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(490, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(310, 453);
+            this.panel2.Size = new System.Drawing.Size(310, 450);
             this.panel2.TabIndex = 11;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(800, 450);
+            this.flowLayoutPanel1.TabIndex = 12;
             // 
             // pictureBox2
             // 
@@ -177,6 +189,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -201,6 +214,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnTogglePassword;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

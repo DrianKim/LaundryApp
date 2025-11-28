@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace LaundryApp
 {
-    public partial class DashboardKaryawan : Form
+    public partial class Dashboard : Form
     {
-        public DashboardKaryawan()
+        public Dashboard()
         {
             InitializeComponent();
         }

@@ -99,7 +99,7 @@ namespace LaundryApp
                         }
                         else if (role == "karyawan")
                         {
-                            DashboardKaryawan karyawan = new DashboardKaryawan();
+                            DashboardKasir karyawan = new DashboardKasir();
                             this.Hide();
                             karyawan.ShowDialog();
                             this.Show();
@@ -138,6 +138,16 @@ namespace LaundryApp
             {
                 btnTogglePassword.Text = "🚫";
             }
+        }
+
+        private void txtPassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

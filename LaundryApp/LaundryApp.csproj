@@ -39,6 +39,9 @@
     <Reference Include="Google.Protobuf, Version=3.30.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.30.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
+    <Reference Include="Guna.UI2, Version=2.0.4.7, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
+      <HintPath>..\packages\Guna.UI2.WinForms.2.0.4.7\lib\net472\Guna.UI2.dll</HintPath>
+    </Reference>
     <Reference Include="K4os.Compression.LZ4, Version=1.3.8.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
       <HintPath>..\packages\K4os.Compression.LZ4.1.3.8\lib\net462\K4os.Compression.LZ4.dll</HintPath>
     </Reference>
@@ -63,6 +66,7 @@
       <HintPath>..\packages\System.Configuration.ConfigurationManager.8.0.0\lib\net462\System.Configuration.ConfigurationManager.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=8.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.8.0.1\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
@@ -84,6 +88,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,35 +103,260 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DashboardKaryawan.cs">
+    <Compile Include="Admin\BuatPesananBaru.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DashboardKaryawan.Designer.cs">
-      <DependentUpon>DashboardKaryawan.cs</DependentUpon>
+    <Compile Include="Admin\BuatPesananBaru.Designer.cs">
+      <DependentUpon>BuatPesananBaru.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Coba.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Coba.Designer.cs">
+      <DependentUpon>Coba.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dashboard.Designer.cs">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\DashboardKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\DashboardKasir.Designer.cs">
+      <DependentUpon>DashboardKasir.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseHelper.cs" />
+    <Compile Include="Admin\DataKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\DataKasir.Designer.cs">
+      <DependentUpon>DataKasir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\DataPelanggan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\DataPelanggan.Designer.cs">
+      <DependentUpon>DataPelanggan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\DataPesanan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\DataPesanan.Designer.cs">
+      <DependentUpon>DataPesanan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\EditKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\EditKasir.Designer.cs">
+      <DependentUpon>EditKasir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\EditLayanan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\EditLayanan.Designer.cs">
+      <DependentUpon>EditLayanan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\EditPelanggan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\EditPelanggan.Designer.cs">
+      <DependentUpon>EditPelanggan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\EditProfilAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\EditProfilAdmin.Designer.cs">
+      <DependentUpon>EditProfilAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\EditProfilKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\EditProfilKasir.Designer.cs">
+      <DependentUpon>EditProfilKasir.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="DashboardAdmin.cs">
+    <Compile Include="Admin\DashboardAdmin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DashboardAdmin.Designer.cs">
+    <Compile Include="Admin\DashboardAdmin.Designer.cs">
       <DependentUpon>DashboardAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\LayananAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\LayananAdmin.Designer.cs">
+      <DependentUpon>LayananAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\Struk.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\Struk.Designer.cs">
+      <DependentUpon>Struk.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\Pembayaran.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\Pembayaran.Designer.cs">
+      <DependentUpon>Pembayaran.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\Pesanan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\Pesanan.Designer.cs">
+      <DependentUpon>Pesanan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\ProfilAdmin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\ProfilAdmin.Designer.cs">
+      <DependentUpon>ProfilAdmin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\ProfilKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\ProfilKasir.Designer.cs">
+      <DependentUpon>ProfilKasir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Owner\DashboardOwner.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Owner\DashboardOwner.Designer.cs">
+      <DependentUpon>DashboardOwner.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Owner\DataUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Owner\DataUser.Designer.cs">
+      <DependentUpon>DataUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Owner\EditUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Owner\EditUser.Designer.cs">
+      <DependentUpon>EditUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Owner\LaporanPemasukan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Owner\LaporanPemasukan.Designer.cs">
+      <DependentUpon>LaporanPemasukan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Owner\TambahUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Owner\TambahUser.Designer.cs">
+      <DependentUpon>TambahUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DashboardAdmin.resx">
+    <Compile Include="Admin\TambahKasir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\TambahKasir.Designer.cs">
+      <DependentUpon>TambahKasir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Admin\TambahLayanan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Admin\TambahLayanan.Designer.cs">
+      <DependentUpon>TambahLayanan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kasir\TambahPelanggan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kasir\TambahPelanggan.Designer.cs">
+      <DependentUpon>TambahPelanggan.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Admin\BuatPesananBaru.resx">
+      <DependentUpon>BuatPesananBaru.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Coba.resx">
+      <DependentUpon>Coba.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dashboard.resx">
+      <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\DashboardAdmin.resx">
       <DependentUpon>DashboardAdmin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DashboardKaryawan.resx">
-      <DependentUpon>DashboardKaryawan.cs</DependentUpon>
+    <EmbeddedResource Include="Kasir\DashboardKasir.resx">
+      <DependentUpon>DashboardKasir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\DataKasir.resx">
+      <DependentUpon>DataKasir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\DataPelanggan.resx">
+      <DependentUpon>DataPelanggan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\DataPesanan.resx">
+      <DependentUpon>DataPesanan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\EditKasir.resx">
+      <DependentUpon>EditKasir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\EditLayanan.resx">
+      <DependentUpon>EditLayanan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\EditPelanggan.resx">
+      <DependentUpon>EditPelanggan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\EditProfilAdmin.resx">
+      <DependentUpon>EditProfilAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\EditProfilKasir.resx">
+      <DependentUpon>EditProfilKasir.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\LayananAdmin.resx">
+      <DependentUpon>LayananAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\Struk.resx">
+      <DependentUpon>Struk.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\Pembayaran.resx">
+      <DependentUpon>Pembayaran.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\Pesanan.resx">
+      <DependentUpon>Pesanan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\ProfilAdmin.resx">
+      <DependentUpon>ProfilAdmin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\ProfilKasir.resx">
+      <DependentUpon>ProfilKasir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Owner\DashboardOwner.resx">
+      <DependentUpon>DashboardOwner.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Owner\DataUser.resx">
+      <DependentUpon>DataUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Owner\EditUser.resx">
+      <DependentUpon>EditUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Owner\LaporanPemasukan.resx">
+      <DependentUpon>LaporanPemasukan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Owner\TambahUser.resx">
+      <DependentUpon>TambahUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -138,6 +368,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Admin\TambahKasir.resx">
+      <DependentUpon>TambahKasir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Admin\TambahLayanan.resx">
+      <DependentUpon>TambahLayanan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kasir\TambahPelanggan.resx">
+      <DependentUpon>TambahPelanggan.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -160,6 +399,42 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\gowash1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Male User.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shopping Trolley.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Customer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dashboard Layout.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Selected %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Selected %282%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Selected %283%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Total Sales.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Total Sales1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
