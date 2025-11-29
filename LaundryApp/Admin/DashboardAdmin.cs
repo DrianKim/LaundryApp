@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaundryApp.Admin;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,16 +28,16 @@ namespace LaundryApp
                     conn.Open();
                     string query = @"
                 SELECT 
-                    p.id AS 'ID',
-                    pel.nama AS 'Pelanggan',
-                    l.nama_layanan AS 'Layanan',
-                    p.total_kg AS 'Total KG',
-                    CONCAT('Rp ', FORMAT(p.total_harga, 0)) AS 'Total Harga',
+                    p.id AS ID,
+                    pel.nama AS Pelanggan,
+                    l.nama_layanan AS Layanan,
+                    p.total_pesanan AS `Total KG`,
+                    CONCAT('Rp ', FORMAT(p.total_harga, 0)) AS `Total Harga`,
                     CASE 
                         WHEN p.diambil_pada IS NULL THEN 'Belum Diambil'
                         ELSE 'Sudah Diambil'
-                    END AS 'Status',
-                    DATE_FORMAT(p.dibuat_pada, '%d %M %Y') AS 'Tanggal'
+                    END AS Status,
+                    DATE_FORMAT(p.dibuat_pada, '%d %M %Y') AS Tanggal
                 FROM pesanan p
                 JOIN pelanggan pel ON p.pelanggan_id = pel.id
                 JOIN layanan l ON p.layanan_id = l.id
@@ -51,23 +52,21 @@ namespace LaundryApp
                     guna2DataGridView1.DataSource = dt;
                 }
 
-                // 🔥 ID disembunyiin di grid YANG BENER
-                guna2DataGridView1.Columns["ID"].Visible = false;
+                if (guna2DataGridView1.Columns["ID"] != null)
+                    guna2DataGridView1.Columns["ID"].Visible = false;
 
-                // 🔥 Styling
+                // Styling
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
                 guna2DataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 11);
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(100, 88, 255);
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                 guna2DataGridView1.EnableHeadersVisualStyles = false;
-
                 guna2DataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 255);
                 guna2DataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 200, 255);
                 guna2DataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
 
                 guna2DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 guna2DataGridView1.RowHeadersVisible = false;
-
                 guna2DataGridView1.RowTemplate.Height = 30;
                 guna2DataGridView1.ColumnHeadersHeight = 35;
                 guna2DataGridView1.ReadOnly = true;
@@ -77,7 +76,6 @@ namespace LaundryApp
                 MessageBox.Show("Gagal load pesanan terbaru: " + ex.Message);
             }
         }
-
 
         private void LoadPendapatan()
         {
@@ -337,5 +335,11 @@ namespace LaundryApp
 
         }
 
+        private void guna2PictureBox3_Click(object sender, EventArgs e)
+        {
+            KategoriAdmin kategoriAdmin = new KategoriAdmin();
+            kategoriAdmin.Show();
+            this.Hide();
+        }
     }
 }

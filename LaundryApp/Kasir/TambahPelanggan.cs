@@ -170,8 +170,10 @@ namespace LaundryApp
 
                         if (result == DialogResult.Yes)
                         {
-                            // 🔹 Pindah ke form Pesanan Baru dengan data pelanggan yang baru ditambahkan
-                            BuatPesananBaru pesananBaruForm = new BuatPesananBaru(lastInsertedId, namaPelanggan, alamatPelanggan, noHpPelanggan);
+                            // 🔹 Ambil userId dari session login
+                            int userId = Login.UserSession.Id;
+
+                            BuatPesananBaru pesananBaruForm = new BuatPesananBaru(userId, lastInsertedId, namaPelanggan, alamatPelanggan, noHpPelanggan);
                             pesananBaruForm.Show();
                             this.Hide();
                         }

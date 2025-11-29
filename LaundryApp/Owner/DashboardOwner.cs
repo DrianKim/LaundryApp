@@ -31,7 +31,7 @@ namespace LaundryApp.Owner
                     p.id AS 'ID',
                     pel.nama AS 'Pelanggan',
                     l.nama_layanan AS 'Layanan',
-                    p.total_kg AS 'Total KG',
+                    p.total_pesanan AS 'Total KG',
                     CONCAT('Rp ', FORMAT(p.total_harga, 0)) AS 'Total Harga',
                     CASE 
                         WHEN p.diambil_pada IS NULL THEN 'Belum Diambil'

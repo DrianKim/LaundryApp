@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ClosedXML.Excel;
+using System.IO;
 
 namespace LaundryApp.Owner
 {
@@ -30,7 +32,7 @@ namespace LaundryApp.Owner
                 SELECT 
                     p.id,
                     u.nama AS pelanggan,
-                    p.total_kg,
+                    p.total_pesanan,
                     p.tambahan,
                     p.metode_bayar,
                     p.total_harga,
@@ -71,7 +73,7 @@ namespace LaundryApp.Owner
 
                     guna2DataGridView1.Columns["id"].HeaderText = "ID";
                     guna2DataGridView1.Columns["pelanggan"].HeaderText = "User";
-                    guna2DataGridView1.Columns["total_kg"].HeaderText = "Total KG";
+                    guna2DataGridView1.Columns["total_pesanan"].HeaderText = "Total Pesanan";
                     guna2DataGridView1.Columns["tambahan"].HeaderText = "Tambahan";
                     guna2DataGridView1.Columns["metode_bayar"].HeaderText = "Metode Bayar";
                     guna2DataGridView1.Columns["total_harga"].HeaderText = "Total Harga";
@@ -183,92 +185,72 @@ namespace LaundryApp.Owner
 
         private void guna2ButtonExport_Click(object sender, EventArgs e)
         {
+            ExportToExcel();
+        }
+
+        private void ExportToExcel()
+        {
             if (guna2DataGridView1.Rows.Count == 0)
             {
-                MessageBox.Show("Tidak ada data untuk diexport!");
+                MessageBox.Show("Tidak ada data untuk diexport.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             SaveFileDialog save = new SaveFileDialog();
-            save.Filter = "Excel File (*.xls)|*.xls";
-            save.FileName =
-                $"Laporan_Pemasukan_{DateTimePickerTanggalMulai.Value:ddMMyyyy}_{DateTimePickerTanggalSelesai.Value:ddMMyyyy}.xls";
+            save.Filter = "Excel File (*.xlsx)|*.xlsx";
+            save.FileName = "Laporan_Pemasukan_" + DateTime.Now.ToString("yyyyMMdd") + ".xlsx";
 
             if (save.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    using (System.IO.StreamWriter sw = new System.IO.StreamWriter(save.FileName, false, Encoding.UTF8))
+                    using (XLWorkbook wb = new XLWorkbook())
                     {
-                        // ============================
-                        // HEADER
-                        // ============================
-                        sw.WriteLine("LAPORAN PEMASUKAN LAUNDRY");
-                        sw.WriteLine("Periode:\t" +
-                            DateTimePickerTanggalMulai.Value.ToString("dd MMM yyyy") +
-                            " - " +
-                            DateTimePickerTanggalSelesai.Value.ToString("dd MMM yyyy"));
-                        sw.WriteLine("Tanggal Export:\t" + DateTime.Now.ToString("dd MMM yyyy HH:mm"));
-                        sw.WriteLine("");
+                        DataTable dt = new DataTable();
 
-                        // ============================
-                        // HEADER KOLOM (PAKE TAB)
-                        // ============================
-                        List<string> headers = new List<string>();
+                        // Buat kolom
                         foreach (DataGridViewColumn col in guna2DataGridView1.Columns)
                         {
-                            if (col.Visible)
-                                headers.Add(col.HeaderText);
+                            if (col.Visible) // hanya kolom yang tampil
+                                dt.Columns.Add(col.HeaderText);
                         }
 
-                        sw.WriteLine(string.Join("\t", headers));
-
-                        // ============================
-                        // DATA BARIS (PAKE TAB)
-                        // ============================
+                        // Isi baris
                         foreach (DataGridViewRow row in guna2DataGridView1.Rows)
                         {
                             if (!row.IsNewRow)
                             {
-                                List<string> cells = new List<string>();
+                                DataRow dr = dt.NewRow();
+                                int index = 0;
 
-                                foreach (DataGridViewCell cell in row.Cells)
+                                foreach (DataGridViewColumn col in guna2DataGridView1.Columns)
                                 {
-                                    if (guna2DataGridView1.Columns[cell.ColumnIndex].Visible)
+                                    if (col.Visible)
                                     {
-                                        string value = cell.Value?.ToString() ?? "";
-                                        value = value.Replace("\t", " "); // amanin tab
-                                        cells.Add(value);
+                                        dr[index] = row.Cells[col.Name].Value;
+                                        index++;
                                     }
                                 }
 
-                                sw.WriteLine(string.Join("\t", cells));
+                                dt.Rows.Add(dr);
                             }
                         }
 
-                        // ============================
-                        // TOTAL PENDAPATAN
-                        // ============================
-                        decimal total = guna2DataGridView1.Rows
-                            .Cast<DataGridViewRow>()
-                            .Where(r => !r.IsNewRow)
-                            .Sum(r => Convert.ToDecimal(r.Cells["total_harga"].Value));
+                        // Tambah sheet
+                        wb.Worksheets.Add(dt, "Laporan");
 
-                        sw.WriteLine("");
-                        sw.WriteLine("TOTAL PENDAPATAN\t\t" + total);
-                        sw.WriteLine("");
-                        sw.WriteLine("Export selesai");
+                        // Save file
+                        wb.SaveAs(save.FileName);
                     }
 
-                    MessageBox.Show("Export data berhasil!",
-                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Export berhasil!\nFile tersimpan di:\n" + save.FileName,
+                        "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error export: " + ex.Message);
+                    MessageBox.Show("Gagal export: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
-
     }
 }

@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaundryApp.Admin;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -43,26 +44,41 @@ namespace LaundryApp
                 using (var conn = new DatabaseHelper().GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT id, nama_layanan, harga_per_kg, deskripsi FROM layanan";
-                    MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
 
+                    // JOIN kategori biar bisa muncul nama + tipe
+                    string query = @"
+                SELECT 
+                    l.id,
+                    l.nama_layanan,
+                    l.harga,
+                    l.deskripsi,
+                    l.kategori_id,
+                    CONCAT(k.name, ' (', k.tipe, ')') AS kategori_lengkap
+                FROM layanan l
+                LEFT JOIN kategori k ON k.id = l.kategori_id
+                ORDER BY l.id DESC";
+
+                    MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
                     DataTable dtLayanan = new DataTable();
                     da.Fill(dtLayanan);
+
                     guna2DataGridView1.DataSource = dtLayanan;
 
-                    // GRID boleh diedit dulu (nanti kita kunci per kolom)
+                    // Boleh diedit, nanti dikunci
                     guna2DataGridView1.ReadOnly = false;
 
-                    // rename kolom
+                    // Rename header
                     guna2DataGridView1.Columns["id"].HeaderText = "ID";
                     guna2DataGridView1.Columns["nama_layanan"].HeaderText = "Nama Layanan";
-                    guna2DataGridView1.Columns["harga_per_kg"].HeaderText = "Harga (Rp/Kg)";
+                    guna2DataGridView1.Columns["harga"].HeaderText = "Harga (Rp)";
                     guna2DataGridView1.Columns["deskripsi"].HeaderText = "Deskripsi";
+                    guna2DataGridView1.Columns["kategori_lengkap"].HeaderText = "Kategori";
 
-                    // Sembunyikan ID sesuai revisi guru
+                    // Sembunyikan id & kategori_id (internal)
                     guna2DataGridView1.Columns["id"].Visible = false;
+                    guna2DataGridView1.Columns["kategori_id"].Visible = false;
 
-                    // Tambah kolom checkbox Aksi
+                    // Checkbox Aksi
                     if (!guna2DataGridView1.Columns.Contains("Aksi"))
                     {
                         DataGridViewCheckBoxColumn checkColumn = new DataGridViewCheckBoxColumn();
@@ -71,7 +87,6 @@ namespace LaundryApp
                         checkColumn.Width = 60;
                         checkColumn.TrueValue = true;
                         checkColumn.FalseValue = false;
-                        checkColumn.ReadOnly = false; // WAJIB!
                         guna2DataGridView1.Columns.Add(checkColumn);
                     }
 
@@ -82,15 +97,18 @@ namespace LaundryApp
                     }
                 }
 
-                // styling
+                // STYLING
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
                 guna2DataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 11);
+
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(100, 88, 255);
                 guna2DataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                 guna2DataGridView1.EnableHeadersVisualStyles = false;
+
                 guna2DataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 255);
                 guna2DataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 200, 255);
                 guna2DataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
+
                 guna2DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 guna2DataGridView1.RowHeadersVisible = false;
                 guna2DataGridView1.RowTemplate.Height = 30;
@@ -98,7 +116,8 @@ namespace LaundryApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal load data layanan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Gagal load data layanan: " + ex.Message,
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -196,8 +215,8 @@ namespace LaundryApp
         {
             if (guna2DataGridView1.CurrentRow != null)
             {
-                int id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["ID"].Value);
-                string namaLayanan = guna2DataGridView1.CurrentRow.Cells["Nama Layanan"].Value.ToString();
+                int id = Convert.ToInt32(guna2DataGridView1.CurrentRow.Cells["id"].Value);
+                string namaLayanan = guna2DataGridView1.CurrentRow.Cells["nama_layanan"].Value.ToString();
 
                 var confirm = MessageBox.Show(
                     $"Yakin mau hapus layanan '{namaLayanan}'?",
@@ -221,20 +240,65 @@ namespace LaundryApp
                             }
                         }
 
-                        MessageBox.Show($"Layanan **{namaLayanan}** berhasil dihapus ✅", "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        LoadDataLayanan();
+                        MessageBox.Show($"Layanan '{namaLayanan}' berhasil dihapus ✅",
+                            "Sukses", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        LoadDataLayanan(); // refresh tabel
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Gagal hapus layanan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Gagal hapus layanan: " + ex.Message,
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Pilih layanan dulu sebelum hapus bro 😅", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Pilih layanan dulu sebelum hapus bro 😅",
+                    "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
+        private void guna2Panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Panel4_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void guna2Panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2PictureBox3_Click(object sender, EventArgs e)
+        {
+            KategoriAdmin kategoriAdmin = new KategoriAdmin();
+            kategoriAdmin.Show();
+            this.Hide();
+        }
     }
 }

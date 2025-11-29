@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaundryApp.Admin;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -300,6 +301,13 @@ namespace LaundryApp
         private void pictureBox2_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void guna2PictureBox3_Click_1(object sender, EventArgs e)
+        {
+            KategoriAdmin kategoriAdmin = new KategoriAdmin();
+            kategoriAdmin.Show();
+            this.Hide();
         }
     }
 }

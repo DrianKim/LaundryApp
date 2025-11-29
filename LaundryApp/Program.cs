@@ -1,4 +1,5 @@
-﻿using LaundryApp.Owner;
+﻿using LaundryApp.Admin;
+using LaundryApp.Owner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace LaundryApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new Login());
-            Application.Run(new DashboardOwner());
+            Application.Run(new Login());
+            //Application.Run(new DashboardOwner());
             //Application.Run(new DashboardKasir());
             //Application.Run(new DashboardAdmin());
             //Application.Run(new DataPelanggan());
@@ -28,6 +29,7 @@ namespace LaundryApp
             //Application.Run(new ProfilAdmin());
             //Application.Run(new LayananAdmin());
             //Application.Run(new TambahLayanan());
+            //Application.Run(new KategoriAdmin());
             //Application.Run(new Coba());
         }
     }

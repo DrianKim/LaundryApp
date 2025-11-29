@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaundryApp.Admin;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -31,7 +32,33 @@ namespace LaundryApp
             this.AutoScaleMode = AutoScaleMode.Dpi;
             this.PerformAutoScale();
 
+            LoadKategori();
             LoadDataLayanan();
+        }
+
+        private void LoadKategori()
+        {
+            try
+            {
+                using (var conn = new DatabaseHelper().GetConnection())
+                {
+                    conn.Open();
+                    string query = "SELECT id, CONCAT(name, ' - ', tipe) AS kategori_full FROM kategori ORDER BY name ASC";
+
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+
+                    guna2ComboBoxKategori.DataSource = dt;
+                    guna2ComboBoxKategori.DisplayMember = "kategori_full";
+                    guna2ComboBoxKategori.ValueMember = "id";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Gagal load kategori: " + ex.Message);
+            }
         }
 
         private void LoadDataLayanan()
@@ -41,21 +68,31 @@ namespace LaundryApp
                 using (var conn = new DatabaseHelper().GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT nama_layanan, harga_per_kg, deskripsi FROM layanan WHERE id = @id";
+                    string query = @"SELECT nama_layanan, harga, deskripsi, kategori_id 
+                             FROM layanan WHERE id = @id";
+
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", layananId);
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             if (reader.Read())
                             {
                                 guna2TextBoxNama.Text = reader["nama_layanan"].ToString();
-                                guna2TextBoxHarga.Text = reader["harga_per_kg"].ToString();
+                                guna2TextBoxHarga.Text = reader["harga"].ToString();
                                 guna2TextBoxDeskripsi.Text = reader["deskripsi"].ToString();
+
+                                // SET kategorinya di combobox
+                                if (reader["kategori_id"] != DBNull.Value)
+                                {
+                                    guna2ComboBoxKategori.SelectedValue = Convert.ToInt32(reader["kategori_id"]);
+                                }
                             }
                             else
                             {
-                                MessageBox.Show("Data layanan ga ditemukan bro 😢", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show("Data layanan tidak ditemukan!", "Error",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 this.Close();
                             }
                         }
@@ -64,9 +101,10 @@ namespace LaundryApp
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Gagal load data layanan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Gagal load data layanan: " + ex.Message);
             }
         }
+
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
@@ -160,16 +198,19 @@ namespace LaundryApp
                 {
                     conn.Open();
                     string query = @"UPDATE layanan 
-                             SET nama_layanan = @nama, 
-                                 harga_per_kg = @harga, 
-                                 deskripsi = @deskripsi 
-                             WHERE id = @id";
+                 SET nama_layanan = @nama,
+                     harga = @harga,
+                     deskripsi = @deskripsi,
+                     kategori_id = @kategori
+                 WHERE id = @id";
+
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@nama", nama);
                         cmd.Parameters.AddWithValue("@harga", harga);
                         cmd.Parameters.AddWithValue("@deskripsi", deskripsi);
+                        cmd.Parameters.AddWithValue("@kategori", guna2ComboBoxKategori.SelectedValue);
                         cmd.Parameters.AddWithValue("@id", layananId);
 
                         int rows = cmd.ExecuteNonQuery();
@@ -191,6 +232,13 @@ namespace LaundryApp
             {
                 MessageBox.Show("Error saat update layanan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void guna2PictureBox3_Click(object sender, EventArgs e)
+        {
+            KategoriAdmin kategoriAdmin = new KategoriAdmin();
+            kategoriAdmin.Show();
+            this.Hide();
         }
     }
 }

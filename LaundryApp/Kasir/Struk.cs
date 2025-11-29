@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
@@ -12,28 +13,52 @@ namespace LaundryApp
         decimal TotalKg, TotalHarga;
         DateTime Dibuat;
 
-        public Struk(int id, string pelanggan, string layanan,
-                     decimal totalKg, decimal totalHarga,
-                     string tambahan, string metode, DateTime dibuat)
+        public Struk(long id)
         {
             InitializeComponent();
+            LoadDataById(id);
+        }
 
-            Id = id;
-            Pelanggan = pelanggan;
-            Layanan = layanan;
-            TotalKg = totalKg;
-            TotalHarga = totalHarga;
-            Tambahan = tambahan;
-            Metode = metode;
-            Dibuat = dibuat;
+        private void LoadDataById(long id)
+        {
+            using (var conn = new DatabaseHelper().GetConnection())
+            {
+                conn.Open();
 
-            this.StartPosition = FormStartPosition.CenterScreen;
+                string sql = @"SELECT p.id, pel.nama AS pelanggan, l.nama_layanan AS layanan,
+                       p.total_pesanan, p.total_harga, p.tambahan,
+                       p.metode_bayar, p.dibuat_pada
+                       FROM pesanan p
+                       JOIN pelanggan pel ON p.pelanggan_id = pel.id
+                       JOIN layanan l ON p.layanan_id = l.id
+                       WHERE p.id = @id";
+
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        Id = dr.GetInt32("id");
+                        Pelanggan = dr.GetString("pelanggan");
+                        Layanan = dr.GetString("layanan");
+                        TotalKg = dr.GetDecimal("total_pesanan");
+                        TotalHarga = dr.GetDecimal("total_harga");
+                        Tambahan = dr.GetString("tambahan");
+                        Metode = dr.GetString("metode_bayar");
+                        Dibuat = dr.GetDateTime("dibuat_pada");
+                    }
+                }
+            }
         }
 
         private void Struk_Load(object sender, EventArgs e)
         {
+            this.StartPosition = FormStartPosition.CenterScreen;
+
             labelStruk.AutoSize = false;
-            labelStruk.Width = 400; // WAJIB! Biar text bisa tampil
+            labelStruk.Width = 400; 
             labelStruk.Font = new Font("Consolas", 12);
             labelStruk.TextAlign = ContentAlignment.TopLeft;
             labelStruk.Padding = new Padding(10);
@@ -41,7 +66,6 @@ namespace LaundryApp
             labelStruk.Text = GenerateStrukText();
             labelStruk.Visible = true;
 
-            // Auto hitung tinggi text
             Size textSize = TextRenderer.MeasureText(
                 labelStruk.Text,
                 labelStruk.Font,
@@ -51,7 +75,6 @@ namespace LaundryApp
 
             labelStruk.Height = textSize.Height + 20;
 
-            // Auto adjust ukuran form
             this.Width = labelStruk.Left + labelStruk.Width + 40;
             this.Height = labelStruk.Top + labelStruk.Height + 80;
         }
@@ -88,6 +111,11 @@ namespace LaundryApp
                 Row("Tanggal", Dibuat.ToString("dd MMM yyyy - HH:mm")) + "\n\n" +
                 "Terima kasih telah menggunakan layanan kami 😄\n" +
                 Center(footer) + "\n";
+        }
+
+        private void guna2Button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void guna2Button1_Click(object sender, EventArgs e)

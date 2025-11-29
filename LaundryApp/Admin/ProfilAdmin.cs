@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using LaundryApp.Admin;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -140,6 +141,13 @@ namespace LaundryApp
                 // Tutup form sekarang (dashboard)
                 this.Hide();
             }
+        }
+
+        private void guna2PictureBox3_Click(object sender, EventArgs e)
+        {
+            KategoriAdmin kategoriAdmin = new KategoriAdmin();
+            kategoriAdmin.Show();
+            this.Hide();
         }
     }
 }

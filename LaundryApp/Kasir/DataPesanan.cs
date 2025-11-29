@@ -26,21 +26,27 @@ namespace LaundryApp
                 using (var conn = new DatabaseHelper().GetConnection())
                 {
                     conn.Open();
+
                     string query = @"
                 SELECT 
-                    p.id,
-                    pel.nama AS pelanggan,
-                    l.nama_layanan AS layanan,
-                    p.total_kg,
-                    p.total_harga,
-                    p.tambahan,
-                    p.metode_bayar,
-                    p.dibuat_pada,
-                    p.diambil_pada
-                FROM pesanan p
-                INNER JOIN pelanggan pel ON p.pelanggan_id = pel.id
-                INNER JOIN layanan l ON p.layanan_id = l.id
-                ORDER BY p.id DESC;
+    p.id,
+    pel.nama AS pelanggan,
+    l.nama_layanan AS layanan,
+    p.total_pesanan,
+    p.total_harga,  -- ← ORIGINAL (decimal), jangan diformat
+    CONCAT('Rp ', FORMAT(p.total_harga, 0)) AS total_harga_format, -- untuk display
+    p.tambahan,
+    p.metode_bayar,
+    DATE_FORMAT(p.dibuat_pada, '%d %M %Y %H:%i') AS dibuat_pada,
+    CASE
+        WHEN p.diambil_pada IS NULL THEN 'Belum Diambil'
+        ELSE DATE_FORMAT(p.diambil_pada, '%d %M %Y %H:%i')
+    END AS diambil_pada
+FROM pesanan p
+INNER JOIN pelanggan pel ON p.pelanggan_id = pel.id
+INNER JOIN layanan l ON p.layanan_id = l.id
+ORDER BY p.id DESC;
+
             ";
 
                     MySqlDataAdapter da = new MySqlDataAdapter(query, conn);
@@ -57,27 +63,29 @@ namespace LaundryApp
                     guna2DataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 245, 255);
                     guna2DataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 200, 255);
                     guna2DataGridView1.DefaultCellStyle.SelectionForeColor = Color.Black;
+
                     guna2DataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                     guna2DataGridView1.RowHeadersVisible = false;
 
                     guna2DataGridView1.RowTemplate.Height = 32;
                     guna2DataGridView1.ColumnHeadersHeight = 35;
 
-                    // Header kolom
+                    // Rename header
                     guna2DataGridView1.Columns["pelanggan"].HeaderText = "Nama Pelanggan";
                     guna2DataGridView1.Columns["layanan"].HeaderText = "Layanan";
-                    guna2DataGridView1.Columns["total_kg"].HeaderText = "Total KG";
-                    guna2DataGridView1.Columns["total_harga"].HeaderText = "Total Harga (Rp)";
+                    guna2DataGridView1.Columns["total_pesanan"].HeaderText = "Total Pesanan";
+                    guna2DataGridView1.Columns["total_harga"].Visible = false;
+                    guna2DataGridView1.Columns["total_harga_format"].HeaderText = "Total Harga";
                     guna2DataGridView1.Columns["tambahan"].HeaderText = "Tambahan";
                     guna2DataGridView1.Columns["metode_bayar"].HeaderText = "Metode Bayar";
                     guna2DataGridView1.Columns["dibuat_pada"].HeaderText = "Dibuat Pada";
                     guna2DataGridView1.Columns["diambil_pada"].HeaderText = "Diambil Pada";
 
-                    // === SEMBUNYIKAN ID ===
+                    // Sembunyikan ID
                     if (guna2DataGridView1.Columns.Contains("id"))
                         guna2DataGridView1.Columns["id"].Visible = false;
 
-                    // === Tambah kolom Aksi ===
+                    // Tambah kolom aksi
                     if (!guna2DataGridView1.Columns.Contains("Aksi"))
                     {
                         DataGridViewCheckBoxColumn checkColumn = new DataGridViewCheckBoxColumn();
@@ -89,11 +97,14 @@ namespace LaundryApp
                         guna2DataGridView1.Columns.Add(checkColumn);
                     }
 
-                    // Boleh dicentang, selain itu readonly
                     guna2DataGridView1.ReadOnly = false;
+
                     foreach (DataGridViewColumn col in guna2DataGridView1.Columns)
                     {
-                        col.ReadOnly = col.Name != "Aksi";
+                        if (col.Name == "Aksi")
+                            col.ReadOnly = false;  
+                        else
+                            col.ReadOnly = true;   
                     }
                 }
             }
@@ -278,16 +289,15 @@ namespace LaundryApp
             string layanan = guna2DataGridView1.CurrentRow.Cells["layanan"].Value.ToString();
             string tambahan = guna2DataGridView1.CurrentRow.Cells["tambahan"].Value.ToString();
             string metode = guna2DataGridView1.CurrentRow.Cells["metode_bayar"].Value.ToString();
-            decimal totalKg = Convert.ToDecimal(guna2DataGridView1.CurrentRow.Cells["total_kg"].Value);
+            decimal totalPesanan = Convert.ToDecimal(guna2DataGridView1.CurrentRow.Cells["total_pesanan"].Value);
             decimal totalHarga = Convert.ToDecimal(guna2DataGridView1.CurrentRow.Cells["total_harga"].Value);
             DateTime dibuat = Convert.ToDateTime(guna2DataGridView1.CurrentRow.Cells["dibuat_pada"].Value);
 
             // Kirim ke form Struk
-            var frm = new Struk(
-                id, pelanggan, layanan, totalKg, totalHarga, tambahan, metode, dibuat
-            );
+            var frm = new Struk(id);
+            frm.Show();
 
-            frm.ShowDialog();
+            //frm.ShowDialog();
         }
     }
 }

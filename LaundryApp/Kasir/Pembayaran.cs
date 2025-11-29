@@ -16,23 +16,28 @@ namespace LaundryApp
         public decimal TotalAmount { get; private set; }
         public decimal PaidAmount { get; private set; }
 
+        public string MetodeBayar { get; private set; }
+
         public Pembayaran(decimal total)
         {
             InitializeComponent();
 
-            // Biar modal ada di tengah parent
             this.StartPosition = FormStartPosition.CenterParent;
             this.TopMost = true;
 
+            // 🔥 Set default otomatis ke Tunai
+            MetodeBayar = "Tunai";
+
             TotalAmount = total;
             guna2TextBoxTotalBayar.Text = $"Rp {TotalAmount:N0}";
-            guna2TextBoxTotalBayar.ReadOnly = true; // Biar ga bisa diedit
-            guna2TextBoxTotalBayar.FillColor = Color.FromArgb(240, 240, 240); // Biar keliatan disabled elegan
+            guna2TextBoxTotalBayar.ReadOnly = true;
+            guna2TextBoxTotalBayar.FillColor = Color.FromArgb(240, 240, 240);
             guna2TextBoxTotalBayar.BorderColor = Color.Transparent;
 
             guna2TextBoxTotalDibayar.Text = TotalAmount.ToString(CultureInfo.InvariantCulture);
             guna2TextBoxTotalDibayar.Focus();
         }
+
 
         private void Pembayaran_Load(object sender, EventArgs e)
         {

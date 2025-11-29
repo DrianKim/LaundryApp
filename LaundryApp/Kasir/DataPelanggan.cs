@@ -322,11 +322,10 @@ namespace LaundryApp
                         alamat = row.Cells["alamat"].Value.ToString();
                         no_hp = row.Cells["no_hp"].Value.ToString();
                         found = true;
-                        break; // selesai, ga usah cek row lain
+                        break;
                     }
                 }
 
-                // 🔹 Kalo gak ada yang dicentang, kasih peringatan
                 if (!found)
                 {
                     MessageBox.Show("Pilih pelanggan dulu dengan mencentang checkbox di kolom Aksi!",
@@ -336,7 +335,6 @@ namespace LaundryApp
                     return;
                 }
 
-                // 🔹 Konfirmasi dulu sebelum pindah ke pesanan
                 DialogResult result = MessageBox.Show(
                     $"Buat pesanan baru untuk pelanggan:\n\n{nama}?",
                     "Konfirmasi",
@@ -346,8 +344,11 @@ namespace LaundryApp
 
                 if (result == DialogResult.Yes)
                 {
-                    // 🔥 Pindah ke form Buat Pesanan Baru
-                    BuatPesananBaru f = new BuatPesananBaru(id, nama, alamat, no_hp);
+                    // 🔥 TAMBAHKAN userId DI SINI - ambil dari session login
+                    int userId = Login.UserSession.Id; // atau cara lain untuk dapatkan user ID
+
+                    // Panggil dengan parameter yang benar - SEMUA 5 PARAMETER
+                    BuatPesananBaru f = new BuatPesananBaru(userId, id, nama, alamat, no_hp);
                     f.Show();
                     this.Hide();
                 }
